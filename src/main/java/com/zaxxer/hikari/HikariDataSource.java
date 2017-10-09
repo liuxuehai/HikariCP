@@ -84,6 +84,7 @@ public class HikariDataSource extends HikariConfig implements DataSource, Closea
       }
 
       // See http://en.wikipedia.org/wiki/Double-checked_locking#Usage_in_Java
+      // 双重检查锁定模式 https://zh.wikipedia.org/wiki/%E5%8F%8C%E9%87%8D%E6%A3%80%E6%9F%A5%E9%94%81%E5%AE%9A%E6%A8%A1%E5%BC%8F
       HikariPool result = pool;
       if (result == null) {
          synchronized (this) {
@@ -252,7 +253,7 @@ public class HikariDataSource extends HikariConfig implements DataSource, Closea
 
    /**
     * Evict a connection from the pool.
-    *
+    * 从链接池释放一个链接
     * @param connection the connection to evict from the pool
     */
    public void evictConnection(Connection connection)
@@ -266,6 +267,7 @@ public class HikariDataSource extends HikariConfig implements DataSource, Closea
    /**
     * Suspend allocation of connections from the pool.  All callers to <code>getConnection()</code>
     * will block indefinitely until <code>resumePool()</code> is called.
+    * 挂起所有链接池的链接分配
     */
    public void suspendPool()
    {
@@ -277,6 +279,8 @@ public class HikariDataSource extends HikariConfig implements DataSource, Closea
 
    /**
     * Resume allocation of connections from the pool.
+    * 
+    * 重启链接池的链接分配
     */
    public void resumePool()
    {
@@ -288,6 +292,7 @@ public class HikariDataSource extends HikariConfig implements DataSource, Closea
 
    /**
     * Shutdown the DataSource and its associated pool.
+    * 关闭数据源和关联的链接池
     */
    @Override
    public void close()

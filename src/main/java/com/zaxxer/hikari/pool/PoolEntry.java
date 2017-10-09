@@ -31,7 +31,7 @@ import com.zaxxer.hikari.util.FastList;
 
 /**
  * Entry used in the ConcurrentBag to track Connection instances.
- *
+ * ConcurrentBag的路口用于跟踪链接实体
  * @author Brett Wooldridge
  */
 final class PoolEntry implements IConcurrentBagEntry
@@ -77,7 +77,7 @@ final class PoolEntry implements IConcurrentBagEntry
 
    /**
     * Release this entry back to the pool.
-    *
+    * 释放链接到链接池
     * @param lastAccessed last access time-stamp
     */
    void recycle(final long lastAccessed)

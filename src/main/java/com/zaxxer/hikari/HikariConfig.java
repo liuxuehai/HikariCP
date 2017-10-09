@@ -59,6 +59,7 @@ public class HikariConfig implements HikariConfigMXBean
    private static boolean unitTest;
 
    // Properties changeable at runtime through the MBean
+   //  这些属性可以通过MBean在运行时修改
    //
    private volatile long connectionTimeout;
    private volatile long validationTimeout;
@@ -69,7 +70,7 @@ public class HikariConfig implements HikariConfigMXBean
    private volatile int minIdle;
 
    // Properties NOT changeable at runtime
-   //
+   //这些属性 不能在运行时修改
    private String catalog;
    private String connectionInitSql;
    private String connectionTestQuery;
@@ -99,6 +100,7 @@ public class HikariConfig implements HikariConfigMXBean
    static
    {
       // POOL_NUMBER is global to the VM to avoid overlapping pool numbers in classloader scoped environments
+	  // POOL_NUMBER 作为全局变量，避免在类加载作用域中重复加载
       final Properties sysProps = System.getProperties();
       AtomicInteger poolNumber = (AtomicInteger) sysProps.get("com.zaxxer.hikari.pool_number");
       if (poolNumber == null) {

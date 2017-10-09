@@ -31,6 +31,8 @@ import java.util.function.UnaryOperator;
 
 /**
  * Fast list without range checking.
+ * 
+ * fast list  没有边界检查
  *
  * @author Brett Wooldridge
  */

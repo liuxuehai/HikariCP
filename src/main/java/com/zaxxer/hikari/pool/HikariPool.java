@@ -61,6 +61,7 @@ import static com.zaxxer.hikari.util.UtilityElf.quietlySleep;
  * This is the primary connection pool class that provides the basic
  * pooling behavior for HikariCP.
  *
+ * 这是为HikariCP提供主要链接池功能的主要类
  * @author Brett Wooldridge
  */
 public class HikariPool extends PoolBase implements HikariPoolMXBean, IBagStateListener
@@ -138,7 +139,7 @@ public class HikariPool extends PoolBase implements HikariPoolMXBean, IBagStateL
 
    /**
     * Get a connection from the pool, or timeout after connectionTimeout milliseconds.
-    *
+    *获取一个链接
     * @return a java.sql.Connection instance
     * @throws SQLException thrown if a timeout occurs trying to obtain a connection
     */
@@ -149,7 +150,7 @@ public class HikariPool extends PoolBase implements HikariPoolMXBean, IBagStateL
 
    /**
     * Get a connection from the pool, or timeout after the specified number of milliseconds.
-    *
+    *  从链接池获取一个链接
     * @param hardTimeout the maximum time to wait for a connection from the pool
     * @return a java.sql.Connection instance
     * @throws SQLException thrown if a timeout occurs trying to obtain a connection
@@ -203,7 +204,7 @@ public class HikariPool extends PoolBase implements HikariPoolMXBean, IBagStateL
    /**
     * Shutdown the pool, closing all idle connections and aborting or closing
     * active connections.
-    *
+    * 关闭链接池,关闭所有空闲的链接，中断或关闭活动的链接
     * @throws InterruptedException thrown if the thread is interrupted during shutdown
     */
    public final synchronized void shutdown() throws InterruptedException
@@ -387,7 +388,7 @@ public class HikariPool extends PoolBase implements HikariPoolMXBean, IBagStateL
 
    /**
     * Release a connection back to the pool, or permanently close it if it is broken.
-    *
+    * 释放链接回链接池
     * @param poolEntry the PoolBagEntry to release back to the pool
     */
    @Override
@@ -400,7 +401,7 @@ public class HikariPool extends PoolBase implements HikariPoolMXBean, IBagStateL
 
    /**
     * Permanently close the real (underlying) connection (eat any exception).
-    *
+    * 永久的关闭真实链接
     * @param poolEntry poolEntry having the connection to close
     * @param closureReason reason to close
     */
@@ -427,6 +428,7 @@ public class HikariPool extends PoolBase implements HikariPoolMXBean, IBagStateL
 
    /**
     * Create and add a single connection to the pool.
+    * 创建和添加一个单独的链接到链接池
     */
    private PoolEntry createPoolEntry()
    {
@@ -436,6 +438,7 @@ public class HikariPool extends PoolBase implements HikariPoolMXBean, IBagStateL
          final long maxLifetime = config.getMaxLifetime();
          if (maxLifetime > 0) {
             // variance up to 2.5% of the maxlifetime
+        	// 方差高达2.5%的maxlifetime数值
             final long variance = maxLifetime > 10_000 ? ThreadLocalRandom.current().nextLong( maxLifetime / 40 ) : 0;
             final long lifetime = maxLifetime - variance;
             poolEntry.setFutureEol(houseKeepingExecutorService.schedule(new Runnable() {
@@ -459,6 +462,8 @@ public class HikariPool extends PoolBase implements HikariPoolMXBean, IBagStateL
 
    /**
     * Fill pool up from current idle connections (as they are perceived at the point of execution) to minimumIdle connections.
+    * 
+    * 向链接池中添加空闲的链接
     */
    private void fillPool()
    {
@@ -562,8 +567,10 @@ public class HikariPool extends PoolBase implements HikariPoolMXBean, IBagStateL
                return Boolean.TRUE;
             }
 
-            // failed to get connection from db, sleep and retry
+            // failed to get connection from db, sleep and retry 
+            // 获取链接失败，睡眠后重试
             quietlySleep(sleepBackoff);
+            //最大10s,最小250或配置的值,每次1.5倍递增
             sleepBackoff = Math.min(SECONDS.toMillis(10), Math.min(connectionTimeout, (long) (sleepBackoff * 1.5)));
          }
          // Pool is suspended or shutdown or at max size
@@ -573,6 +580,8 @@ public class HikariPool extends PoolBase implements HikariPoolMXBean, IBagStateL
 
    /**
     * The house keeping task to retire idle connections.
+    * 
+    * 该task用于回收空闲链接
     */
    private class HouseKeeper implements Runnable
    {
